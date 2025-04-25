@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Link</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        .timer-warning {
+            animation: pulse 0.5s ease-in-out infinite;
+            color: #ef4444;
+            display: inline-block;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        .fade-in-delay-1 {
+            animation-delay: 0.2s;
+            opacity: 0;
+        }
+        .fade-in-delay-2 {
+            animation-delay: 0.4s;
+            opacity: 0;
+        }
+        .fade-in-delay-3 {
+            animation-delay: 0.6s;
+            opacity: 0;
+        }
+        .fade-in-delay-4 {
+            animation-delay: 0.8s;
+            opacity: 0;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* Traffic Light Styles */
+        .traffic-light {
+            display: flex;
+            gap: 1.25rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+            margin-top: 1rem;
+            background: rgba(255,255,255,0.2);
+            padding: 1rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .light {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 9999px;
+            opacity: 0.3;
+            transition: all 0.5s ease;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .light::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 9999px;
+            box-shadow: inset 3px 3px 6px rgba(255, 255, 255, 0.4), 
+                        inset -3px -3px 6px rgba(0, 0, 0, 0.4);
+            opacity: 0.5;
+        }
+        
+        .light.active {
+            opacity: 1;
+            transform: scale(1.1);
+            box-shadow: 0 0 20px currentColor;
+        }
+        
+        .light.red { 
+            background-color: #ef4444; 
+            color: #ef4444;
+        }
+        
+        .light.yellow { 
+            background-color: #eab308; 
+            color: #eab308;
+        }
+        
+        .light.green { 
+            background-color: #22c55e; 
+            color: #22c55e;
+        }
+        
+        @keyframes pulse-light {
+            0%, 100% { transform: scale(1.1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        .light.active {
+            opacity: 1;
+            transform: scale(1.1);
+            box-shadow: 0 0 20px currentColor;
+            animation: pulse-light 0.8s ease-in-out infinite;
+        }
+        
+        .get-ready-text {
+            font-size: 1.75rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+        }
+        
+        #word-hint {
+            font-weight: 700;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark .get-ready-text {
+            background: linear-gradient(135deg, #ffffff, #d1d5db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Game Page Specific Styles */
+        .game-container {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+        
+        .stat-box {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 0.75rem 1.5rem;
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .word-input-container {
+            position: relative;
+            overflow: visible;
+        }
+        
+        .word-input-container::before {
+            content: none;
+        }
+        
+        #word-input {
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(5px);
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+        
+        #word-input:focus {
+            outline: none;
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25);
+            background: rgba(255,255,255,0.1);
+        }
+        
+        #word-input:hover {
+            border-color: rgba(59, 130, 246, 0.3);
+            background: rgba(255,255,255,0.08);
+        }
+        
+        #submit-word {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            transition: all 0.3s ease;
+        }
+        
+        #submit-word:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+        
+        #submit-word:active:not(:disabled) {
+            transform: translateY(0);
+        }
+        
+        #current-letter {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 4.5rem;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        #word-history {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            border-radius: 1rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            padding-top: 1.5rem;
+            position: relative;
+        }
+        
+        #word-history div {
+            transition: all 0.3s ease;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            margin: 0.5rem 0.75rem;
+            background: rgba(255,255,255,0.05);
+            border-left: 3px solid rgba(59, 130, 246, 0.5);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideIn 0.3s ease-out forwards;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        #word-history div:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        #word-history div::after {
+            content: attr(data-letter);
+            font-size: 0.75rem;
+            padding: 0.15rem 0.5rem;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 999px;
+            color: rgba(59, 130, 246, 1);
+            font-weight: bold;
+        }
+        
+        .dark #word-history div::after {
+            background: rgba(59, 130, 246, 0.3);
+            color: rgba(191, 219, 254, 1);
+        }
+        
+        .word-history-label {
+            position: absolute;
+            top: -0.75rem;
+            left: 1rem;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            padding: 0.25rem 1rem;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+        }
+        
+        /* Scrollbar styling */
+        #word-history::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        #word-history::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+        
+        #word-history::-webkit-scrollbar-thumb {
+            background: rgba(59, 130, 246, 0.3);
+            border-radius: 4px;
+        }
+        
+        #word-history::-webkit-scrollbar-thumb:hover {
+            background: rgba(59, 130, 246, 0.5);
+        }
+        
+        #start-round {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            transition: all 0.3s ease;
+        }
+        
+        #start-round:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
+        }
+        
+        #start-round:active:not(:disabled) {
+            transform: translateY(0);
+        }
+        
+        #time-select {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            /* Add custom select arrow styling */
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.2em;
+            padding-right: 2.5rem;
+        }
+        
+        .dark #time-select {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        }
+        
+        /* Dropdown menu styling */
+        #time-select option {
+            background: rgba(255,255,255,0.9);
+            color: #1f2937;
+            padding: 10px;
+            font-size: 1rem;
+        }
+        
+        .dark #time-select option {
+            background: rgba(31, 41, 55, 0.9);
+            color: #e5e7eb;
+        }
+        
+        /* Hover effects for dropdown */
+        #time-select:hover {
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+        }
+        
+        #time-select:focus {
+            outline: none;
+            border-color: rgba(59, 130, 246, 0.8);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+        
+        /* Custom select container */
+        .select-container {
+            position: relative;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+        
+        .select-container:hover {
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Mobile Optimizations */
+        @media screen and (max-width: 380px) {
+            .game-container {
+                padding: 1rem 0.75rem;
+                margin: 0 auto;
+            }
+            
+            .stat-box {
+                padding: 0.5rem 0.75rem;
+            }
+            
+            #current-letter {
+                font-size: 3.5rem;
+                margin: 0.5rem 0;
+            }
+            
+            .traffic-light {
+                gap: 0.75rem;
+                margin-bottom: 1rem;
+            }
+            
+            .light {
+                width: 2.25rem;
+                height: 2.25rem;
+            }
+            
+            .get-ready-text {
+                font-size: 1.5rem;
+                margin-bottom: 1rem;
+            }
+            
+            .word-input-container input {
+                padding: 0.75rem 0.5rem;
+                font-size: 1rem;
+            }
+            
+            #submit-word {
+                padding: 0.75rem 0.5rem;
+                font-size: 1rem;
+            }
+            
+            #word-history {
+                margin-top: 1rem;
+                padding-top: 1.25rem;
+            }
+            
+            .word-history-label {
+                font-size: 0.75rem;
+            }
+            
+            #word-history div {
+                padding: 0.5rem 0.75rem;
+                margin: 0.35rem 0.5rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Typing Animation */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .typing-animation {
+            position: relative;
+            display: inline-block;
+            min-height: 1.5em;
+            min-width: 8ch;
+        }
+
+        .typing-animation::after {
+            content: '|';
+            position: absolute;
+            right: -6px;
+            animation: blink 0.7s infinite;
+            color: #8b5cf6;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .typing-animation.finished::after {
+            display: none;
+        }
+    </style>
+</head>
+<body class="font-['Poppins'] bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800 min-h-screen flex justify-center items-center p-5 transition-colors duration-200">
+    <!-- Dark Mode Toggle -->
+    <button id="dark-mode-toggle" class="fixed top-4 right-4 p-2 rounded-full bg-white/10 backdrop-blur-sm border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-all duration-200 shadow-lg">
+        <svg class="w-6 h-6 text-gray-800 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path class="dark:hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+            <path class="hidden dark:block" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+        </svg>
+    </button>
+
+    <div id="title-page" class="page active w-full max-w-3xl">
+        <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-3xl shadow-2xl p-10 text-center border border-white/20 dark:border-gray-700/50">
+            <div class="floating">
+                <h1 class="text-8xl font-extrabold mb-4 gradient-text">Word Chain</h1>
+            </div>
+            
+            <div class="space-y-6">
+                <p class="text-2xl text-gray-600 dark:text-gray-300 fade-in fade-in-delay-1">
+                    Test your vocabulary and quick thinking skills!
+                </p>
+                <p class="text-xl text-gray-600 dark:text-gray-300 fade-in fade-in-delay-2">
+                    Chain words together by using the last letter of the previous word.
+                </p>
+                <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6 my-8 fade-in fade-in-delay-3">
+                    <p class="text-xl font-semibold text-gray-800 dark:text-gray-200">
+                        Example: <span id="typing-animation" class="typing-animation"></span>
+                    </p>
+                </div>
+                <p class="text-xl text-gray-600 dark:text-gray-300 fade-in fade-in-delay-4">
+                    Choose your preferred time limit and make as many valid words as possible!
+                </p>
+            </div>
+            
+            <button id="start-game" class="mt-12 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white px-14 py-5 text-3xl rounded-xl transition transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl fade-in fade-in-delay-4">
+                Play Now
+            </button>
+        </div>
+    </div>
+
+    <div id="game-page" class="page w-full max-w-2xl">
+        <!-- Game Message (Outside the game container) -->
+        <div id="word-hint" class="text-xl text-gray-800 dark:text-gray-200 font-medium mb-4 sm:mb-6 text-center">Press Go to start!</div>
+        
+        <!-- Traffic Light (Outside the game container) -->
+        <div id="traffic-light" class="traffic-light hidden mb-4 sm:mb-6">
+            <div class="light red"></div>
+            <div class="light yellow"></div>
+            <div class="light green"></div>
+        </div>
+        
+        <div class="game-container rounded-3xl shadow-lg p-6 sm:p-8">
+            <!-- Header Section - Single row layout -->
+            <div class="flex items-center justify-between gap-2 sm:gap-4 mb-4 sm:mb-8">
+                <!-- Timer -->
+                <div class="stat-box">
+                    <div class="text-base sm:text-xl font-semibold text-gray-600 dark:text-gray-300">
+                        🕒 <span id="time" class="font-bold">30s</span>
+                    </div>
+                </div>
+                
+                <!-- Current Letter - Larger and centered -->
+                <div id="current-letter" class="text-5xl sm:text-7xl font-extrabold px-2 sm:px-4">A</div>
+                
+                <!-- Score -->
+                <div class="stat-box">
+                    <div class="text-base sm:text-xl font-semibold text-gray-600 dark:text-gray-300">
+                        📈 Score: <span id="score" class="font-bold">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center space-y-4 sm:space-y-6">
+                <!-- Input Section -->
+                <div class="flex gap-2 sm:gap-4 mb-4 sm:mb-6">
+                    <div class="word-input-container flex-1">
+                        <input type="text" id="word-input" placeholder="Type your word..." autocomplete="off" disabled
+                            class="w-full px-3 sm:px-6 py-3 sm:py-4 text-base sm:text-lg rounded-xl transition-all disabled:bg-gray-100/10 dark:disabled:bg-gray-700/20 dark:bg-gray-700/20 dark:text-white placeholder-gray-400 dark:placeholder-gray-500">
+                    </div>
+                    <button id="submit-word" disabled
+                        class="px-4 sm:px-8 py-3 sm:py-4 text-white text-base sm:text-lg font-semibold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap">
+                        Submit
+                    </button>
+                </div>
+
+                <!-- Game Controls -->
+                <div class="game-controls transition-all space-y-3 sm:space-y-4">
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
+                        <label for="time-select" class="text-base sm:text-lg font-semibold text-gray-600 dark:text-gray-300">Game Time:</label>
+                        <div class="select-container w-full sm:w-auto">
+                            <select id="time-select" class="w-full px-4 sm:px-6 py-2 sm:py-3 text-base sm:text-lg rounded-xl cursor-pointer bg-transparent dark:text-white">
+                                <option value="15">15 seconds</option>
+                                <option value="30" selected>30 seconds</option>
+                                <option value="45">45 seconds</option>
+                                <option value="60">60 seconds</option>
+                                <option value="90">90 seconds</option>
+                                <option value="120">120 seconds</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button id="start-round" class="w-full sm:w-auto px-8 sm:px-12 py-3 sm:py-4 text-white text-xl sm:text-2xl font-bold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                        Go!
+                    </button>
+                </div>
+            </div>
+
+            <!-- Word History -->
+            <div class="mt-4 sm:mt-8 relative">
+                <div class="word-history-label">Word Bank</div>
+                <div id="word-history" class="h-36 sm:h-48 overflow-y-auto rounded-xl p-3 sm:p-4">
+                    <!-- Words will be added here dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- End Modal - More responsive padding and text sizes -->
+        <div id="end-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 md:p-8 text-center max-w-md w-full">
+                <h2 class="text-xl sm:text-2xl text-gray-800 dark:text-white mb-4 sm:mb-6">⏰ Time's Up!</h2>
+                <p class="mb-4 sm:mb-6 dark:text-gray-300">You got <span id="final-score">0</span> words!</p>
+                <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                    <button id="play-again" class="w-full sm:w-auto bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl text-base sm:text-lg transition transform hover:scale-105">🔁 Play Again</button>
+                    <button id="view-stats" class="w-full sm:w-auto bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-xl text-base sm:text-lg transition transform hover:scale-105">📊 View Stats</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Modal - More responsive padding and text sizes -->
+        <div id="stats-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 md:p-8 text-center max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+                <h2 class="text-xl sm:text-2xl text-gray-800 dark:text-white mb-4 sm:mb-6">📊 Your Statistics</h2>
+                
+                <!-- Tabs - Scrollable on mobile -->
+                <div class="flex gap-2 mb-4 sm:mb-6 border-b border-gray-200 dark:border-gray-600 overflow-x-auto pb-2">
+                    <button data-time="15" class="stats-tab px-3 sm:px-4 py-2 text-sm sm:text-base text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 border-b-2 border-transparent hover:border-blue-600 dark:hover:border-blue-400 transition-all whitespace-nowrap">15s</button>
+                    <button data-time="30" class="stats-tab px-3 sm:px-4 py-2 text-sm sm:text-base text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 border-b-2 border-transparent hover:border-blue-600 dark:hover:border-blue-400 transition-all whitespace-nowrap">30s</button>
+                    <button data-time="45" class="stats-tab px-3 sm:px-4 py-2 text-sm sm:text-base text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 border-b-2 border-transparent hover:border-blue-600 dark:hover:border-blue-400 transition-all whitespace-nowrap">45s</button>
+                    <button data-time="60" class="stats-tab px-3 sm:px-4 py-2 text-sm sm:text-base text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 border-b-2 border-transparent hover:border-blue-600 dark:hover:border-blue-400 transition-all whitespace-nowrap">60s</button>
+                    <button data-time="90" class="stats-tab px-3 sm:px-4 py-2 text-sm sm:text-base text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 border-b-2 border-transparent hover:border-blue-600 dark:hover:border-blue-400 transition-all whitespace-nowrap">90s</button>
+                    <button data-time="120" class="stats-tab px-3 sm:px-4 py-2 text-sm sm:text-base text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 border-b-2 border-transparent hover:border-blue-600 dark:hover:border-blue-400 transition-all whitespace-nowrap">120s</button>
+                </div>
+                
+                <!-- Stats Content - Stack on mobile, grid on larger screens -->
+                <div class="relative">
+                    <div id="stats-content-15" class="stats-content hidden grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5"></div>
+                    <div id="stats-content-30" class="stats-content hidden grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5"></div>
+                    <div id="stats-content-45" class="stats-content hidden grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5"></div>
+                    <div id="stats-content-60" class="stats-content hidden grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5"></div>
+                    <div id="stats-content-90" class="stats-content hidden grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5"></div>
+                    <div id="stats-content-120" class="stats-content hidden grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5"></div>
+                </div>
+                
+                <button id="close-stats" class="mt-6 sm:mt-8 w-full sm:w-auto bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-xl text-base sm:text-lg transition">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
