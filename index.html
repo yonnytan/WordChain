@@ -172,6 +172,11 @@
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
         }
         
+        .dark .game-container {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
         .stat-box {
             background: rgba(255,255,255,0.1);
             backdrop-filter: blur(5px);
@@ -179,6 +184,20 @@
             padding: 0.75rem 1.5rem;
             border-radius: 1rem;
             transition: all 0.3s ease;
+            width: 110px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .dark .stat-box {
+            background: rgba(55, 65, 81, 0.8);
+            color: #f3f4f6;
+            border: 1px solid rgba(75, 85, 99, 0.3);
+        }
+        
+        .dark .stat-box div {
+            color: #f3f4f6;
         }
         
         .stat-box:hover {
@@ -200,6 +219,12 @@
             background: rgba(255,255,255,0.05);
             backdrop-filter: blur(5px);
             border: 2px solid rgba(255,255,255,0.1);
+        }
+        
+        .dark #word-input {
+            background-color: rgba(55, 65, 81, 0.8);
+            border-color: rgba(75, 85, 99, 0.3);
+            color: white;
         }
         
         #word-input:focus {
@@ -246,6 +271,11 @@
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
             padding-top: 1.5rem;
             position: relative;
+        }
+        
+        .dark #word-history {
+            background: rgba(55, 65, 81, 0.3);
+            border: none;
         }
         
         #word-history div {
@@ -333,6 +363,10 @@
             transition: all 0.3s ease;
         }
         
+        .dark #start-round {
+            background: #22c55e;
+        }
+        
         #start-round:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
@@ -349,15 +383,20 @@
             transition: all 0.3s ease;
             /* Add custom select arrow styling */
             appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234b5563' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat;
             background-position: right 1rem center;
             background-size: 1.2em;
             padding-right: 2.5rem;
+            color: #4b5563;
         }
         
         .dark #time-select {
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-color: rgba(55, 65, 81, 0.8);
+            color: #f3f4f6;
+            border-color: rgba(75, 85, 99, 0.5);
+            border-radius: 1rem;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f3f4f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
         }
         
         /* Dropdown menu styling */
@@ -397,6 +436,12 @@
             transition: all 0.3s ease;
         }
         
+        .dark .select-container {
+            background: rgba(55, 65, 81, 0.5);
+            border: 1px solid rgba(75, 85, 99, 0.3);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+
         .select-container:hover {
             border-color: rgba(59, 130, 246, 0.5);
             box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
@@ -457,6 +502,17 @@
                 margin: 0.35rem 0.5rem;
                 font-size: 0.9rem;
             }
+            
+            /* Additional title page optimizations for very small screens */
+            #title-page .bg-white\/70 {
+                padding: 1.5rem 1rem;
+            }
+            
+            .gradient-text {
+                word-wrap: break-word;
+                hyphens: auto;
+                line-height: 1.1;
+            }
         }
 
         /* Typing Animation */
@@ -469,17 +525,28 @@
             position: relative;
             display: inline-block;
             min-height: 1.5em;
-            min-width: 8ch;
+            min-width: 5ch;
         }
 
         .typing-animation::after {
             content: '|';
             position: absolute;
-            right: -6px;
+            right: -4px;
             animation: blink 0.7s infinite;
             color: #8b5cf6;
             font-weight: bold;
-            font-size: 1.2em;
+            font-size: 1em;
+        }
+
+        @media (min-width: 640px) {
+            .typing-animation {
+                min-width: 8ch;
+            }
+            
+            .typing-animation::after {
+                right: -6px;
+                font-size: 1.2em;
+            }
         }
 
         .typing-animation.finished::after {
@@ -487,44 +554,47 @@
         }
     </style>
 </head>
-<body class="font-['Poppins'] bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800 min-h-screen flex justify-center items-center p-5 transition-colors duration-200">
-    <!-- Dark Mode Toggle -->
-    <button id="dark-mode-toggle" class="fixed top-4 right-4 p-2 rounded-full bg-white/10 backdrop-blur-sm border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-all duration-200 shadow-lg">
+<body class="font-['Poppins'] bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800 min-h-screen flex justify-center items-center p-4 transition-colors duration-200">
+    <!-- Dark Mode Toggle - Fixed position -->
+    <button id="dark-mode-toggle" class="fixed top-4 right-4 z-50 p-2 rounded-full bg-white/10 backdrop-blur-sm border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-all duration-200 shadow-lg">
         <svg class="w-6 h-6 text-gray-800 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path class="dark:hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
             <path class="hidden dark:block" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
         </svg>
     </button>
 
+    <!-- Title page - separate page that fills container when active -->
     <div id="title-page" class="page active w-full max-w-3xl">
-        <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-3xl shadow-2xl p-10 text-center border border-white/20 dark:border-gray-700/50">
+        <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-lg rounded-3xl shadow-2xl p-6 sm:p-10 text-center border border-white/20 dark:border-gray-700/50 w-full">
             <div class="floating">
-                <h1 class="text-8xl font-extrabold mb-4 gradient-text">Word Chain</h1>
+                <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold mb-4 gradient-text">Word Chain</h1>
             </div>
             
-            <div class="space-y-6">
-                <p class="text-2xl text-gray-600 dark:text-gray-300 fade-in fade-in-delay-1">
+            <div class="space-y-4 sm:space-y-6">
+                <p class="text-xl sm:text-2xl text-gray-600 dark:text-gray-300 fade-in fade-in-delay-1">
                     Test your vocabulary and quick thinking skills!
                 </p>
-                <p class="text-xl text-gray-600 dark:text-gray-300 fade-in fade-in-delay-2">
+                <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-300 fade-in fade-in-delay-2">
                     Chain words together by using the last letter of the previous word.
                 </p>
-                <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6 my-8 fade-in fade-in-delay-3">
-                    <p class="text-xl font-semibold text-gray-800 dark:text-gray-200">
-                        Example: <span id="typing-animation" class="typing-animation"></span>
+                <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4 sm:p-6 my-6 sm:my-8 fade-in fade-in-delay-3">
+                    <p class="text-lg sm:text-xl font-semibold text-gray-800 dark:text-gray-200">
+                        Example:
                     </p>
+                    <span id="typing-animation" class="typing-animation"></span>
                 </div>
-                <p class="text-xl text-gray-600 dark:text-gray-300 fade-in fade-in-delay-4">
+                <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-300 fade-in fade-in-delay-4">
                     Choose your preferred time limit and make as many valid words as possible!
                 </p>
             </div>
             
-            <button id="start-game" class="mt-12 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white px-14 py-5 text-3xl rounded-xl transition transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl fade-in fade-in-delay-4">
+            <button id="start-game" class="mt-8 sm:mt-12 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white px-8 sm:px-14 py-4 sm:py-5 text-xl sm:text-2xl md:text-3xl rounded-xl transition transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl fade-in fade-in-delay-4">
                 Play Now
             </button>
         </div>
     </div>
 
+    <!-- Game page - separate page that fills container when active -->
     <div id="game-page" class="page w-full max-w-2xl">
         <!-- Game Message (Outside the game container) -->
         <div id="word-hint" class="text-xl text-gray-800 dark:text-gray-200 font-medium mb-4 sm:mb-6 text-center">Press Go to start!</div>
@@ -536,13 +606,13 @@
             <div class="light green"></div>
         </div>
         
-        <div class="game-container rounded-3xl shadow-lg p-6 sm:p-8">
+        <div class="game-container rounded-3xl shadow-lg p-6 sm:p-8 w-full">
             <!-- Header Section - Single row layout -->
             <div class="flex items-center justify-between gap-2 sm:gap-4 mb-4 sm:mb-8">
                 <!-- Timer -->
                 <div class="stat-box">
-                    <div class="text-base sm:text-xl font-semibold text-gray-600 dark:text-gray-300">
-                        🕒 <span id="time" class="font-bold">30s</span>
+                    <div class="text-base sm:text-xl font-semibold text-gray-600 dark:text-gray-300 flex items-center">
+                        🕒 <span id="time" class="font-bold font-mono ml-1">30s</span>
                     </div>
                 </div>
                 
@@ -551,8 +621,8 @@
                 
                 <!-- Score -->
                 <div class="stat-box">
-                    <div class="text-base sm:text-xl font-semibold text-gray-600 dark:text-gray-300">
-                        📈 Score: <span id="score" class="font-bold">0</span>
+                    <div class="text-base sm:text-xl font-semibold text-gray-600 dark:text-gray-300 flex items-center">
+                        📈 <span id="score" class="font-bold font-mono ml-1">0</span>
                     </div>
                 </div>
             </div>
@@ -562,7 +632,7 @@
                 <div class="flex gap-2 sm:gap-4 mb-4 sm:mb-6">
                     <div class="word-input-container flex-1">
                         <input type="text" id="word-input" placeholder="Type your word..." autocomplete="off" disabled
-                            class="w-full px-3 sm:px-6 py-3 sm:py-4 text-base sm:text-lg rounded-xl transition-all disabled:bg-gray-100/10 dark:disabled:bg-gray-700/20 dark:bg-gray-700/20 dark:text-white placeholder-gray-400 dark:placeholder-gray-500">
+                            class="w-full px-3 sm:px-6 py-3 sm:py-4 text-base sm:text-lg rounded-xl transition-all disabled:bg-gray-100/10 dark:disabled:bg-gray-700/50 dark:bg-gray-700/50 dark:text-white placeholder-gray-400 dark:placeholder-gray-500">
                     </div>
                     <button id="submit-word" disabled
                         class="px-4 sm:px-8 py-3 sm:py-4 text-white text-base sm:text-lg font-semibold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap">
@@ -575,7 +645,7 @@
                     <div class="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
                         <label for="time-select" class="text-base sm:text-lg font-semibold text-gray-600 dark:text-gray-300">Game Time:</label>
                         <div class="select-container w-full sm:w-auto">
-                            <select id="time-select" class="w-full px-4 sm:px-6 py-2 sm:py-3 text-base sm:text-lg rounded-xl cursor-pointer bg-transparent dark:text-white">
+                            <select id="time-select" class="w-full px-4 sm:px-6 py-2 sm:py-3 text-base sm:text-lg rounded-xl cursor-pointer bg-transparent dark:text-gray-300">
                                 <option value="15">15 seconds</option>
                                 <option value="30" selected>30 seconds</option>
                                 <option value="45">45 seconds</option>
@@ -612,29 +682,29 @@
             </div>
         </div>
 
-        <!-- Stats Modal - More responsive padding and text sizes -->
+        <!-- Stats Modal - Improve dark mode and layout -->
         <div id="stats-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4">
             <div class="bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-6 md:p-8 text-center max-w-3xl w-full max-h-[90vh] overflow-y-auto">
                 <h2 class="text-xl sm:text-2xl text-gray-800 dark:text-white mb-4 sm:mb-6">📊 Your Statistics</h2>
                 
-                <!-- Tabs - Scrollable on mobile -->
-                <div class="flex gap-2 mb-4 sm:mb-6 border-b border-gray-200 dark:border-gray-600 overflow-x-auto pb-2">
-                    <button data-time="15" class="stats-tab px-3 sm:px-4 py-2 text-sm sm:text-base text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 border-b-2 border-transparent hover:border-blue-600 dark:hover:border-blue-400 transition-all whitespace-nowrap">15s</button>
-                    <button data-time="30" class="stats-tab px-3 sm:px-4 py-2 text-sm sm:text-base text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 border-b-2 border-transparent hover:border-blue-600 dark:hover:border-blue-400 transition-all whitespace-nowrap">30s</button>
-                    <button data-time="45" class="stats-tab px-3 sm:px-4 py-2 text-sm sm:text-base text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 border-b-2 border-transparent hover:border-blue-600 dark:hover:border-blue-400 transition-all whitespace-nowrap">45s</button>
-                    <button data-time="60" class="stats-tab px-3 sm:px-4 py-2 text-sm sm:text-base text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 border-b-2 border-transparent hover:border-blue-600 dark:hover:border-blue-400 transition-all whitespace-nowrap">60s</button>
-                    <button data-time="90" class="stats-tab px-3 sm:px-4 py-2 text-sm sm:text-base text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 border-b-2 border-transparent hover:border-blue-600 dark:hover:border-blue-400 transition-all whitespace-nowrap">90s</button>
-                    <button data-time="120" class="stats-tab px-3 sm:px-4 py-2 text-sm sm:text-base text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 border-b-2 border-transparent hover:border-blue-600 dark:hover:border-blue-400 transition-all whitespace-nowrap">120s</button>
+                <!-- Tabs - Fixed width, no scrolling on mobile -->
+                <div class="flex flex-wrap justify-center gap-2 mb-4 sm:mb-6 border-b border-gray-200 dark:border-gray-600 pb-2">
+                    <button data-time="15" class="stats-tab px-2 py-2 text-xs sm:text-base text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 border-b-2 border-transparent hover:border-blue-600 dark:hover:border-blue-400 transition-all">15s</button>
+                    <button data-time="30" class="stats-tab px-2 py-2 text-xs sm:text-base text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 border-b-2 border-transparent hover:border-blue-600 dark:hover:border-blue-400 transition-all">30s</button>
+                    <button data-time="45" class="stats-tab px-2 py-2 text-xs sm:text-base text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 border-b-2 border-transparent hover:border-blue-600 dark:hover:border-blue-400 transition-all">45s</button>
+                    <button data-time="60" class="stats-tab px-2 py-2 text-xs sm:text-base text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 border-b-2 border-transparent hover:border-blue-600 dark:hover:border-blue-400 transition-all">60s</button>
+                    <button data-time="90" class="stats-tab px-2 py-2 text-xs sm:text-base text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 border-b-2 border-transparent hover:border-blue-600 dark:hover:border-blue-400 transition-all">90s</button>
+                    <button data-time="120" class="stats-tab px-2 py-2 text-xs sm:text-base text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 border-b-2 border-transparent hover:border-blue-600 dark:hover:border-blue-400 transition-all">120s</button>
                 </div>
                 
-                <!-- Stats Content - Stack on mobile, grid on larger screens -->
+                <!-- Stats Content - 2x2 grid even on mobile -->
                 <div class="relative">
-                    <div id="stats-content-15" class="stats-content hidden grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5"></div>
-                    <div id="stats-content-30" class="stats-content hidden grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5"></div>
-                    <div id="stats-content-45" class="stats-content hidden grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5"></div>
-                    <div id="stats-content-60" class="stats-content hidden grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5"></div>
-                    <div id="stats-content-90" class="stats-content hidden grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5"></div>
-                    <div id="stats-content-120" class="stats-content hidden grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5"></div>
+                    <div id="stats-content-15" class="stats-content hidden grid grid-cols-2 gap-3 sm:gap-5"></div>
+                    <div id="stats-content-30" class="stats-content hidden grid grid-cols-2 gap-3 sm:gap-5"></div>
+                    <div id="stats-content-45" class="stats-content hidden grid grid-cols-2 gap-3 sm:gap-5"></div>
+                    <div id="stats-content-60" class="stats-content hidden grid grid-cols-2 gap-3 sm:gap-5"></div>
+                    <div id="stats-content-90" class="stats-content hidden grid grid-cols-2 gap-3 sm:gap-5"></div>
+                    <div id="stats-content-120" class="stats-content hidden grid grid-cols-2 gap-3 sm:gap-5"></div>
                 </div>
                 
                 <button id="close-stats" class="mt-6 sm:mt-8 w-full sm:w-auto bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-xl text-base sm:text-lg transition">Close</button>

@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
           words[i].color
         }-400">${formatWordWithLastLetterUnderlined(words[i].word)}</span>`;
         if (i < words.length - 1) {
-          displayText += ` → `;
+          displayText += ` <span class="text-gray-700 dark:text-white">→</span> `;
         }
       }
 
@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (wordIndex < words.length) {
         if (charIndex > 0) {
           if (wordIndex > 0) {
-            displayText += ` → `;
+            displayText += ` <span class="text-gray-700 dark:text-white">→</span> `;
           }
 
           // Handle the currently typing word with possibly underlined last letter
@@ -585,10 +585,10 @@ function updateStatsDisplay(selectedTime = "30") {
 function createStatBox(label, value) {
   const div = document.createElement("div");
   div.className =
-    "bg-gray-50 rounded-xl p-5 transition transform hover:scale-105";
+    "bg-gray-50 dark:bg-gray-700 rounded-xl p-5 transition transform hover:scale-105";
   div.innerHTML = `
-    <h3 class="text-gray-600 text-sm mb-3">${label}</h3>
-    <p class="text-4xl font-bold text-gray-800">${value}</p>
+    <h3 class="text-gray-600 dark:text-gray-300 text-sm mb-3">${label}</h3>
+    <p class="text-4xl font-bold text-gray-800 dark:text-gray-100">${value}</p>
   `;
   return div;
 }
