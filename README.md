@@ -61,7 +61,3 @@ _A fast-paced word game that challenges your vocabulary and reflexes! Chain word
 👉 [**Launch WordChain on Netlify**](https://wrdchain.netlify.app/)
 
 ---
-
-## 🧠 Author
-
-Created by **Yonatan Belihu** – [LinkedIn](https://www.linkedin.com/in/yonatanbelihu) • [GitHub](https://github.com/yonatanbelihu)
