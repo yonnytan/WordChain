@@ -33,4 +33,8 @@ A fun and challenging word game where players must chain words together based on
 - CSS3
 - JavaScript (ES6+)
 - Local Storage for game statistics
-# WordChain
+
+![wordChainHomeScreen](/Users/yonatanbelihu/Documents/CursorProjects/WordChainGame/website-10.png)
+![wordChainScreen1](/Users/yonatanbelihu/Documents/CursorProjects/WordChainGame/website-11.png)
+![wordChainScreen2](/Users/yonatanbelihu/Documents/CursorProjects/WordChainGame/website-12.png)
+![wordChainScreen3](/Users/yonatanbelihu/Documents/CursorProjects/WordChainGame/website-13.png)

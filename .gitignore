@@ -1,0 +1,19 @@
+# Ignore dependencies
+node_modules/
+
+# Ignore lock files if not needed
+package-lock.json
+
+# Mac-specific files
+.DS_Store
+
+# VSCode or IDE settings
+.vscode/
+.idea/
+
+# Environment
+.env
+
+# Ignore any built files
+dist/
+build/
